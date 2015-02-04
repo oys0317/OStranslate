@@ -37,22 +37,48 @@ class ViewController: UIViewController {
        
         
         var request = NSMutableURLRequest(URL: baseURL!)
+
+        var session = NSURLSession.sharedSession()
+        
         request.HTTPMethod = "POST"
-        request.HTTPBody = bodyURL.dataUsingEncoding(NSUTF8StringEncoding)
         
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
+        var params = [ "grant_type": "client_credentials", "client_id": "\(clientID)", "client_secret": "\(clientSecret)", "scope": "http://api.microsofttranslator.com"] as Dictionary
+        
+        
+        var err: NSError?
+        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "content_type")
+
+        request.addValue("json", forHTTPHeaderField: "accept")
+
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+
+            println("Response: \(response)")
+
+            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+
+            println("Body: \(strData)\n\n")
+            var err: NSError?
+            var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
+            // json = {"response":"Success","msg":"User login successfully."}
             
-            if error != nil{
-                println("error")
+            if((err) != nil) {
+                println(err!.localizedDescription)
             }
-            
-            println("response = \(response)")
-            
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("responseString = \(responseString)")
-        }
-        
+            else {
+                var success = json["response"] as? String
+                println("Succes: \(success)")
+                if json["response"] as NSString == "Success"
+                {
+                    println("Login Successfull")
+                }
+                //self.responseMsg=json["msg"] as String
+                dispatch_async(dispatch_get_main_queue(), {
+                    //self.loginStatusLB.text=self.responseMsg
+                })
+            }
+        })
         task.resume()
         
         
