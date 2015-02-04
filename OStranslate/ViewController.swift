@@ -12,17 +12,94 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        getTranslateData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
+    func getTranslateData() {
+       
+        
+        
+        let clientID = "493812bd-af10-46d9-9b1f-ea1528018dc8"
+        
+        //let clientSecret = "HN85XwPAgYe804BYL60VmDec53GnHFwAn4r4O%2B4M0Y4%3D"
+        let clientSecret = "HN85XwPAgYe804BYL60VmDec53GnHFwAn4r4O+4M0Y4="
+        //let clientSecretEncode = clientSecret.dataUsingEncoding(NSUTF8StringEncoding)!
+        //println(clientSecretEncode)
+        //println(clientSecretEncode)
+        let baseURL = NSURL(string: "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13")
 
+        
+        let bodyURL = "grant_type=client_credentials&client_id=\(clientID)&client_secret=\(clientSecret)&scope=http://api.microsofttranslator.com"
+       
+        
+        var request = NSMutableURLRequest(URL: baseURL!)
+        request.HTTPMethod = "POST"
+        request.HTTPBody = bodyURL.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil{
+                println("error")
+            }
+            
+            println("response = \(response)")
+            
+            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            println("responseString = \(responseString)")
+        }
+        
+        task.resume()
+        
+        
+    }
+ 
+    
 }
+
+
+
+
 /*
+1: string clientID = "<Your ClientID>";
+2: string clientSecret = "<Your Client Secret>";
+3:
+4: String strTranslatorAccessURI = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13";
+5: String strRequestDetails = string.Format("grant_type=client_credentials&client_id={0}&client_secret={1}&scope=http://api.microsofttranslator.com", HttpUtility.UrlEncode(clientID), HttpUtility.UrlEncode(clientSecret));
+6:
+7: System.Net.WebRequest webRequest = System.Net.WebRequest.Create(strTranslatorAccessURI);
+8: webRequest.ContentType = "application/x-www-form-urlencoded";
+9: webRequest.Method = "POST";
+10:
+11: byte[] bytes = System.Text.Encoding.ASCII.GetBytes(strRequestDetails);
+12: webRequest.ContentLength = bytes.Length;
+13: using (System.IO.Stream outputStream = webRequest.GetRequestStream())
+14: {
+    15:     outputStream.Write(bytes, 0, bytes.Length);
+    16: }
+17: System.Net.WebResponse webResponse = webRequest.GetResponse();
+18:
+19: System.Runtime.Serialization.Json.DataContractJsonSerializer serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(AdmAccessToken));
+20: //Get deserialized object from JSON stream
+21: AdmAccessToken token = (AdmAccessToken)serializer.ReadObject(webResponse.GetResponseStream());
+22:
+23: string headerValue = "Bearer " + token.access_token;
+
+
+
+
+
+
+
+
+
+
+
+
 private let apiKey = "81741a98d5fd6db509906b1049ab2d79"
 
 override func viewDidLoad() {
