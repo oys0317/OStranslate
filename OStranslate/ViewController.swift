@@ -9,7 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    var authToken:String = "Bearer "
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getTranslateData()
@@ -27,9 +28,6 @@ class ViewController: UIViewController {
         
         let clientSecret = "HN85XwPAgYe804BYL60VmDec53GnHFwAn4r4O%2B4M0Y4%3D"
         //let clientSecret = "HN85XwPAgYe804BYL60VmDec53GnHFwAn4r4O+4M0Y4="
-        //let clientSecretEncode = clientSecret.dataUsingEncoding(NSUTF8StringEncoding)!
-        //println(clientSecretEncode)
-        //println(clientSecretEncode)
         let baseURL = NSURL(string: "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13")
 
         
@@ -54,19 +52,14 @@ class ViewController: UIViewController {
             println("Body: \(strData)\n\n")
             var err: NSError?
             var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
-            // json = {"response":"Success","msg":"User login successfully."}
             
             if((err) != nil) {
                 println(err!.localizedDescription)
             }
             else {
-                var success = json["response"] as? String
-                println("Succes: \(success)")
-//                if json["response"] as NSString == "Success"
-//                {
-//                    println("Login Successfull")
-//                }
-                //self.responseMsg=json["msg"] as String
+                let accessToken = json["access_token"]! as String
+                self.authToken += accessToken
+                println(self.authToken)
                 dispatch_async(dispatch_get_main_queue(), {
                     //self.loginStatusLB.text=self.responseMsg
                 })
