@@ -20,20 +20,20 @@ class ViewController: UIViewController {
     }
 
     func getTranslateData() {
-       
+        
         
         
         let clientID = "493812bd-af10-46d9-9b1f-ea1528018dc8"
         
-        //let clientSecret = "HN85XwPAgYe804BYL60VmDec53GnHFwAn4r4O%2B4M0Y4%3D"
-        let clientSecret = "HN85XwPAgYe804BYL60VmDec53GnHFwAn4r4O+4M0Y4="
+        let clientSecret = "HN85XwPAgYe804BYL60VmDec53GnHFwAn4r4O%2B4M0Y4%3D"
+        //let clientSecret = "HN85XwPAgYe804BYL60VmDec53GnHFwAn4r4O+4M0Y4="
         //let clientSecretEncode = clientSecret.dataUsingEncoding(NSUTF8StringEncoding)!
         //println(clientSecretEncode)
         //println(clientSecretEncode)
         let baseURL = NSURL(string: "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13")
 
         
-        let bodyURL = "grant_type=client_credentials&client_id=\(clientID)&client_secret=\(clientSecret)&scope=http://api.microsofttranslator.com"
+        let postString = "grant_type=client_credentials&client_id=\(clientID)&client_secret=\(clientSecret)&scope=http://api.microsofttranslator.com"
        
         
         var request = NSMutableURLRequest(URL: baseURL!)
@@ -42,16 +42,9 @@ class ViewController: UIViewController {
         
         request.HTTPMethod = "POST"
         
-        var params = [ "grant_type": "client_credentials", "client_id": "\(clientID)", "client_secret": "\(clientSecret)", "scope": "http://api.microsofttranslator.com"] as Dictionary
-        
-        
         var err: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
-
-        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "content_type")
-
-        request.addValue("json", forHTTPHeaderField: "accept")
-
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
 
             println("Response: \(response)")
@@ -69,10 +62,10 @@ class ViewController: UIViewController {
             else {
                 var success = json["response"] as? String
                 println("Succes: \(success)")
-                if json["response"] as NSString == "Success"
-                {
-                    println("Login Successfull")
-                }
+//                if json["response"] as NSString == "Success"
+//                {
+//                    println("Login Successfull")
+//                }
                 //self.responseMsg=json["msg"] as String
                 dispatch_async(dispatch_get_main_queue(), {
                     //self.loginStatusLB.text=self.responseMsg
