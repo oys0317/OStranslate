@@ -405,6 +405,7 @@
 				F344D7B61A8059B5006A1258 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F344D7B71A8059B5006A1258 /* Build configuration list for PBXNativeTarget "OStranslateTests" */ = {
 			isa = XCConfigurationList;
@@ -413,6 +414,7 @@
 				F344D7B91A8059B5006A1258 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
